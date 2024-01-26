@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klik Aku!</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Klik Aku!</h1>
+    <div class="container">
+        <div class="box"></div>
+        <button id="startButton">Mulai</button>
+        <p id="score">Skor: 0</p>
+        <p id="timer">Waktu: 10 detik</p>
+    </div>
+
+    <footer>
+        <p>Dibuat oleh: <span id="namasaya">Reza.ef</span></p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const box = document.querySelector('.box');
+            const startButton = document.getElementById('startButton');
+            const scoreDisplay = document.getElementById('score');
+            const timerDisplay = document.getElementById('timer');
+
+            let score = 0;
+            let timeLeft = 10;
+            let timer;
+
+            function startGame() {
+                score = 0;
+                timeLeft = 10;
+                updateScore();
+                updateTimer();
+                startButton.disabled = true;
+                box.addEventListener('click', incrementScore);
+                timer = setInterval(updateTime, 1000);
+            }
+
+            function endGame() {
+                clearInterval(timer);
+                box.removeEventListener('click', incrementScore);
+                startButton.disabled = false;
+                alert(`Waktu habis! Skor Anda: ${score}`);
+            }
+
+            function incrementScore() {
+                score++;
+                updateScore();
+            }
+            
+            function handleClick(event) {
+                if (!event.detail || event.detail === 1) {
+                    score++;
+                    updateScore();
+                } else if (event.detail === 2) {
+                    event.preventDefault(); // Menghentikan zoom saat double click pada perangkat mobile
+                    doubleClickInfo.classList.remove('hidden');
+                }
+            }
+
+            function updateScore() {
+                scoreDisplay.textContent = `Skor: ${score}`;
+            }
+
+            function updateTime() {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft === 0) {
+                    endGame();
+                }
+            }
+
+            function updateTimer() {
+                timerDisplay.textContent = `Waktu: ${timeLeft} detik`;
+            }
+
+            startButton.addEventListener('click', startGame);
+        });
+    </script>
+</body>
+</html>
